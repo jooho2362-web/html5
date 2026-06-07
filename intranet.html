@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>임직원 전용 포털 — 비에이텍(주)</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../images/favicon.png">
+</head>
+<body>
+
+    <!-- ===== 인트라넷 전용 헤더 (GNB 없음) ===== -->
+    <header class="intranet-header">
+        <div class="intranet-header-inner">
+            <a href="intranet.html" class="intranet-logo">
+                비에이텍<span>(주)</span>
+            </a>
+            <div class="intranet-badge">
+                <i class="fas fa-lock"></i>
+                임직원 전용 포털
+            </div>
+            <a href="index.html" class="intranet-back-link">
+                <i class="fas fa-arrow-left"></i> 고객 사이트로 돌아가기
+            </a>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- ===== AI 기술지원 어시스턴트 배너 ===== -->
+        <section class="ai-banner-section">
+            <div class="ai-banner-content">
+
+                <div class="ai-banner-eyebrow">
+                    <i class="fas fa-microchip"></i>
+                    Powered by Google NotebookLM
+                </div>
+
+                <h1 class="ai-banner-title">
+                    B.A. Tech 기술지원<br>
+                    <span>통합 AI (NotebookLM)</span>
+                </h1>
+
+                <p class="ai-banner-desc">
+                    현장에서 펌프 고장 증상 및 유지보수 매뉴얼을 AI에게 즉시 질문하세요.<br>
+                    비에이텍 기술 문서를 학습한 AI가 신속하고 정확한 답변을 제공합니다.
+                </p>
+
+                <a
+                    id="btn-ai-launch"
+                    href="https://notebooklm.google.com/notebook/419a4752-c1b1-4375-976b-a8de492e7019"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn-ai-portal"
+                >
+                    <i class="fas fa-robot"></i>
+                    AI 어시스턴트 실행하기
+                </a>
+
+                <p class="ai-banner-note">
+                    <i class="fas fa-info-circle"></i>
+                    Google 계정 로그인 후 이용 가능합니다 &nbsp;·&nbsp; 사내 전용 AI — 외부 공유 금지
+                </p>
+
+                <!-- 통계 배지 -->
+                <div class="ai-stats-row">
+                    <div class="ai-stat-item">
+                        <div class="ai-stat-num">5<span>종</span></div>
+                        <div class="ai-stat-label">학습 완료 제품군</div>
+                    </div>
+                    <div class="ai-stat-item">
+                        <div class="ai-stat-num">24<span>h</span></div>
+                        <div class="ai-stat-label">상시 응답 가능</div>
+                    </div>
+                    <div class="ai-stat-item">
+                        <div class="ai-stat-num">AI<span></span></div>
+                        <div class="ai-stat-label">전문 기술 지원</div>
+                    </div>
+                    <div class="ai-stat-item">
+                        <div class="ai-stat-num"><span>✓</span></div>
+                        <div class="ai-stat-label">최신 매뉴얼 반영</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <hr class="intranet-section-divider">
+
+        <!-- ===== 기술 문서 통합 라이브러리 ===== -->
+        <section class="doc-library-section">
+            <div class="container">
+
+                <div class="doc-library-header">
+                    <div class="doc-library-eyebrow">
+                        <i class="fas fa-folder-open"></i>
+                        Technical Document Library
+                    </div>
+                    <h2 class="doc-library-title">기술 문서 통합 라이브러리</h2>
+                    <p class="doc-library-desc">
+                        비에이텍(주) 전 제품군의 유지관리지침서 및 공식 브로슈어를 다운로드하세요.<br>
+                        최신 개정 문서를 기반으로 현장 정비 및 고객 기술 지원에 활용하시기 바랍니다.
+                    </p>
+                </div>
+
+                <div class="doc-table-wrapper">
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th style="width:110px;">제품 분류</th>
+                                <th>제품명 / 문서 설명</th>
+                                <th style="width:90px;">형식</th>
+                                <th style="width:280px; text-align:center;">지원 도구 (Support Tools)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <!-- 부스터펌프 -->
+                            <tr>
+                                <td>
+                                    <span class="doc-category-tag">
+                                        <i class="fas fa-tint"></i> 부스터
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="doc-name">부스터펌프 유지관리지침서</div>
+                                    <div class="doc-sub">가압 급수 부스터펌프 설치·운전·정비 매뉴얼 (최신 개정판)</div>
+                                </td>
+                                <td>
+                                    <span class="doc-type-badge pdf">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </span>
+                                </td>
+                                <td class="doc-dl-cell">
+                                    <div class="doc-btn-group">
+                                        <a href="#" class="btn-doc-dl" download>
+                                            <i class="fas fa-download"></i> 문서 다운로드
+                                        </a>
+                                        <a href="javascript:void(0)" class="btn-doc-ai" onclick="openBBA_AI('booster')">
+                                            <i class="fas fa-brain"></i> AI 매뉴얼 질의
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="doc-category-tag">
+                                        <i class="fas fa-tint"></i> 부스터
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="doc-name">부스터펌프 공식 브로슈어</div>
+                                    <div class="doc-sub">제품 사양·성능 곡선·모델 라인업 종합 카탈로그</div>
+                                </td>
+                                <td>
+                                    <span class="doc-type-badge pdf">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </span>
+                                </td>
+                                <td class="doc-dl-cell">
+                                    <div class="doc-btn-group">
+                                        <a href="#" class="btn-doc-dl" download>
+                                            <i class="fas fa-download"></i> 문서 다운로드
+                                        </a>
+                                        <a href="javascript:void(0)" class="btn-doc-ai" onclick="openBBA_AI('booster')">
+                                            <i class="fas fa-brain"></i> AI 매뉴얼 질의
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 편흡입볼류트펌프 -->
+                            <tr>
+                                <td>
+                                    <span class="doc-category-tag" style="background:#ecfdf5; color:#059669;">
+                                        <i class="fas fa-water"></i> 볼류트
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="doc-name">편흡입볼류트펌프 유지관리지침서</div>
+                                    <div class="doc-sub">단단 편흡입 볼류트 원심펌프 설치·분해·조립 절차서</div>
+                                </td>
+                                <td>
+                                    <span class="doc-type-badge pdf">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </span>
+                                </td>
+                                <td class="doc-dl-cell">
+                                    <div class="doc-btn-group">
+                                        <a href="#" class="btn-doc-dl" download>
+                                            <i class="fas fa-download"></i> 문서 다운로드
+                                        </a>
+                                        <a href="javascript:void(0)" class="btn-doc-ai" onclick="openBBA_AI('volute')">
+                                            <i class="fas fa-brain"></i> AI 매뉴얼 질의
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="doc-category-tag" style="background:#ecfdf5; color:#059669;">
+                                        <i class="fas fa-water"></i> 볼류트
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="doc-name">편흡입볼류트펌프 공식 브로슈어</div>
+                                    <div class="doc-sub">유량·양정·효율 성능 데이터 및 적용 범위 카탈로그</div>
+                                </td>
+                                <td>
+                                    <span class="doc-type-badge pdf">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </span>
+                                </td>
+                                <td class="doc-dl-cell">
+                                    <div class="doc-btn-group">
+                                        <a href="#" class="btn-doc-dl" download>
+                                            <i class="fas fa-download"></i> 문서 다운로드
+                                        </a>
+                                        <a href="javascript:void(0)" class="btn-doc-ai" onclick="openBBA_AI('volute')">
+                                            <i class="fas fa-brain"></i> AI 매뉴얼 질의
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 수중펌프 -->
+                            <tr>
+                                <td>
+                                    <span class="doc-category-tag" style="background:#e0f2fe; color:#0284c7;">
+                                        <i class="fas fa-arrow-down"></i> 수중
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="doc-name">수중펌프 유지관리지침서</div>
+                                    <div class="doc-sub">심정·오수용 수중 모터펌프 설치·유지·고장진단 절차서</div>
+                                </td>
+                                <td>
+                                    <span class="doc-type-badge pdf">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </span>
+                                </td>
+                                <td class="doc-dl-cell">
+                                    <div class="doc-btn-group">
+                                        <a href="#" class="btn-doc-dl" download>
+                                            <i class="fas fa-download"></i> 문서 다운로드
+                                        </a>
+                                        <a href="javascript:void(0)" class="btn-doc-ai" onclick="openBBA_AI('submersible')">
+                                            <i class="fas fa-brain"></i> AI 매뉴얼 질의
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="doc-category-tag" style="background:#e0f2fe; color:#0284c7;">
+                                        <i class="fas fa-arrow-down"></i> 수중
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="doc-name">수중펌프 공식 브로슈어</div>
+                                    <div class="doc-sub">단상·삼상 수중모터펌프 전 모델 사양·선정 기준 카탈로그</div>
+                                </td>
+                                <td>
+                                    <span class="doc-type-badge pdf">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </span>
+                                </td>
+                                <td class="doc-dl-cell">
+                                    <div class="doc-btn-group">
+                                        <a href="#" class="btn-doc-dl" download>
+                                            <i class="fas fa-download"></i> 문서 다운로드
+                                        </a>
+                                        <a href="javascript:void(0)" class="btn-doc-ai" onclick="openBBA_AI('submersible')">
+                                            <i class="fas fa-brain"></i> AI 매뉴얼 질의
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 슬러지펌프 -->
+                            <tr>
+                                <td>
+                                    <span class="doc-category-tag" style="background:#fef9c3; color:#a16207;">
+                                        <i class="fas fa-recycle"></i> 슬러지
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="doc-name">슬러지펌프 유지관리지침서</div>
+                                    <div class="doc-sub">오·폐수처리 슬러지 이송 펌프 분해·점검·교체 절차서</div>
+                                </td>
+                                <td>
+                                    <span class="doc-type-badge pdf">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </span>
+                                </td>
+                                <td class="doc-dl-cell">
+                                    <div class="doc-btn-group">
+                                        <a href="#" class="btn-doc-dl" download>
+                                            <i class="fas fa-download"></i> 문서 다운로드
+                                        </a>
+                                        <a href="javascript:void(0)" class="btn-doc-ai" onclick="openBBA_AI('sludge')">
+                                            <i class="fas fa-brain"></i> AI 매뉴얼 질의
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="doc-category-tag" style="background:#fef9c3; color:#a16207;">
+                                        <i class="fas fa-recycle"></i> 슬러지
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="doc-name">슬러지펌프 공식 브로슈어</div>
+                                    <div class="doc-sub">점성·고형물 이송 특화 슬러지펌프 전 라인업 카탈로그</div>
+                                </td>
+                                <td>
+                                    <span class="doc-type-badge pdf">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </span>
+                                </td>
+                                <td class="doc-dl-cell">
+                                    <div class="doc-btn-group">
+                                        <a href="#" class="btn-doc-dl" download>
+                                            <i class="fas fa-download"></i> 문서 다운로드
+                                        </a>
+                                        <a href="javascript:void(0)" class="btn-doc-ai" onclick="openBBA_AI('sludge')">
+                                            <i class="fas fa-brain"></i> AI 매뉴얼 질의
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- 일축나사식 모노펌프 -->
+                            <tr>
+                                <td>
+                                    <span class="doc-category-tag" style="background:#f3e8ff; color:#7c3aed;">
+                                        <i class="fas fa-sync-alt"></i> 모노
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="doc-name">일축나사식 모노펌프 유지관리지침서</div>
+                                    <div class="doc-sub">편심 나사(스크류) 방식 모노펌프 로터·스테이터 교체 절차서</div>
+                                </td>
+                                <td>
+                                    <span class="doc-type-badge pdf">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </span>
+                                </td>
+                                <td class="doc-dl-cell">
+                                    <div class="doc-btn-group">
+                                        <a href="#" class="btn-doc-dl" download>
+                                            <i class="fas fa-download"></i> 문서 다운로드
+                                        </a>
+                                        <a href="javascript:void(0)" class="btn-doc-ai" onclick="openBBA_AI('mono')">
+                                            <i class="fas fa-brain"></i> AI 매뉴얼 질의
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="doc-category-tag" style="background:#f3e8ff; color:#7c3aed;">
+                                        <i class="fas fa-sync-alt"></i> 모노
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="doc-name">일축나사식 모노펌프 공식 브로슈어</div>
+                                    <div class="doc-sub">고점도·고형물 이송 특화 모노펌프 사양·적용 분야 카탈로그</div>
+                                </td>
+                                <td>
+                                    <span class="doc-type-badge pdf">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </span>
+                                </td>
+                                <td class="doc-dl-cell">
+                                    <div class="doc-btn-group">
+                                        <a href="#" class="btn-doc-dl" download>
+                                            <i class="fas fa-download"></i> 문서 다운로드
+                                        </a>
+                                        <a href="javascript:void(0)" class="btn-doc-ai" onclick="openBBA_AI('mono')">
+                                            <i class="fas fa-brain"></i> AI 매뉴얼 질의
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 안내 메시지 -->
+                <div style="margin-top: 24px; padding: 18px 24px; background: #fffbeb; border-radius: 12px; border: 1px solid #fde68a; display: flex; align-items: flex-start; gap: 14px;">
+                    <i class="fas fa-exclamation-triangle" style="color: #d97706; margin-top: 2px; flex-shrink: 0;"></i>
+                    <div>
+                        <p style="font-size: 0.88rem; font-weight: 700; color: #92400e; margin-bottom: 4px;">문서 보안 안내</p>
+                        <p style="font-size: 0.83rem; color: #78350f; line-height: 1.6;">
+                            본 자료실의 기술 문서는 비에이텍(주) 임직원 전용입니다. 외부 유출 및 무단 복제를 금합니다.<br>
+                            문서 파일 등록 및 링크 연결이 필요한 경우 담당 부서에 문의하세요.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== 인트라넷 전용 푸터 ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-info">
+                <div class="footer-col">
+                    <h2>비에이텍(주) 임직원 포털</h2>
+                    <p><strong>대표이사</strong> 조세연</p>
+                    <p><strong>사업자등록번호</strong> 221-81-42625</p>
+                    <p><strong>설립일</strong> 2010.11.01</p>
+                </div>
+                <div class="footer-col">
+                    <h2>문의 및 지원</h2>
+                    <p><strong>본사 및 공장</strong> 강원특별자치도 춘천시 퇴계공단2길 64</p>
+                    <p><strong>전화</strong> 033-264-9243</p>
+                    <p><strong>담당자 이메일</strong> jooho2362@gmail.com</p>
+                </div>
+            </div>
+            <div class="copyright-bar">
+                <p>&copy; 2026 B.A.Tech. All rights reserved. &nbsp;|&nbsp; 임직원 전용 — 내부망 전용 시스템 &nbsp;|&nbsp; <a href="index.html" class="intranet-link">고객 사이트로 이동</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BGM 플로팅 플레이어 -->
+    <button id="bgm-toggle-btn" aria-label="BGM 재생/정지">
+        <i class="fas fa-volume-mute"></i>
+    </button>
+    <audio id="bgm-audio" src="../audio/site_bgm.mp3" loop preload="none"></audio>
+
+    <!-- BBA AI 챗봇 모달 -->
+    <div id="bba-ai-modal" class="bba-ai-container">
+        <div class="bba-ai-header">
+            <div class="bba-ai-title">
+                <i class="fas fa-brain"></i> BTech AI 기술지원 어시스턴트
+            </div>
+            <button class="bba-ai-close" id="bba-ai-close-btn">&times;</button>
+        </div>
+        <div class="bba-ai-messages" id="bba-ai-messages-box">
+            <div class="bba-ai-msg bba-ai-msg-bot">
+                안녕하세요! 비에이텍 기술지원 AI 어시스턴트입니다. 현장에서 발생하는 펌프의 고장 증상이나 유지보수 절차에 대해 아래의 추천 질문을 선택하여 해결 방법을 상담받으세요.
+            </div>
+            
+            <!-- 추천 질문 칩 영역 -->
+            <div class="bba-ai-chips-wrap" id="bba-ai-chips-wrap">
+                <button type="button" class="bba-ai-chip" data-index="1">Q. 모노펌프 토출 압력이 갑자기 떨어집니다.</button>
+                <button type="button" class="bba-ai-chip" data-index="2">Q. 가동 중 심한 진동과 소음이 발생합니다.</button>
+                <button type="button" class="bba-ai-chip" data-index="3">Q. 로터와 스테이터 권장 교체 주기는?</button>
+            </div>
+        </div>
+        <div class="bba-ai-input-form">
+            <input type="text" class="bba-ai-input" placeholder="추천 질문 칩을 선택해 주세요..." readonly>
+            <button type="button" class="bba-ai-submit-btn" disabled style="opacity: 0.5; cursor: default;">전송</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

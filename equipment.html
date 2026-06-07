@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장비 및 시설 - 비에이텍(주)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tab-menu { justify-content: flex-start; }
+
+        /* ===== 컨트롤 바 (필터 + 뷰 토글) ===== */
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 16px;
+            background: var(--bg-white);
+            padding: 16px 24px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 9px 20px;
+            border-radius: 50px;
+            border: 1.5px solid var(--border-color);
+            background: #ffffff;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .filter-btn:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            background: #f0f6ff;
+        }
+        .filter-btn.active {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,86,179,0.25);
+        }
+        .view-toggle-group {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-cool-gray);
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .view-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #868e96;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .view-btn.active {
+            background: #ffffff;
+            color: var(--primary-blue);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        /* ===== 시설 리스트 컨테이너 ===== */
+        .facilities-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        /* ── 공통 시설 아이템 카드 ── */
+        .facility-item {
+            background: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, display 0.3s ease;
+        }
+        .facility-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        }
+        .facility-item.hidden {
+            display: none !important;
+        }
+        .facility-img-box {
+            position: relative;
+            overflow: hidden;
+        }
+        .facility-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .facility-item:hover .facility-img-box img {
+            transform: scale(1.05);
+        }
+        .facility-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .facility-info .tag {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .tag.manufacturing { background: #eff6ff; color: var(--primary-blue); }
+        .tag.quality { background: #ecfdf5; color: #10b981; }
+        .tag.storage { background: #fffbeb; color: #f59e0b; }
+
+        .facility-info h4 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+        .facility-info p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .facility-info .btn-more {
+            align-self: flex-start;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            background-color: transparent;
+            border: 1.5px solid var(--primary-blue);
+            padding: 8px 18px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .facility-info .btn-more i {
+            font-size: 0.82rem;
+            transition: transform 0.25s ease;
+        }
+        .facility-item:hover .btn-more {
+            background-color: var(--primary-blue);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2);
+        }
+        .facility-item:hover .btn-more i {
+            transform: translateX(4px);
+        }
+
+        /* ── 뷰 스타일 ── */
+        /* 1) List View (가로 배치) */
+        .facilities-container.list-view {
+            flex-direction: column;
+        }
+        .facilities-container.list-view .facility-item {
+            display: flex;
+            min-height: 240px;
+        }
+        .facilities-container.list-view .facility-img-box {
+            flex: 0 0 35%;
+            min-height: 240px;
+        }
+        .facilities-container.list-view .facility-info {
+            flex: 1;
+            padding: 30px 40px;
+        }
+
+        /* 2) Grid View (바둑판 3열 배치) */
+        .facilities-container.grid-view {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .facilities-container.grid-view .facility-item {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .facilities-container.grid-view .facility-img-box {
+            width: 100%;
+            height: 200px;
+        }
+        .facilities-container.grid-view .facility-info {
+            padding: 24px;
+            flex: 1;
+        }
+
+        /* ===== 동적 모달 팝업창 ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 28, 45, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            background: #ffffff;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            padding: 32px;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--bg-cool-gray);
+        }
+        .modal-close:hover {
+            color: var(--primary-dark);
+            background: #e9ecef;
+        }
+        #modal-img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+        .modal-content h3 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            border-bottom: 1.5px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        
+        /* 정보 박스 공통 */
+        .modal-info-box {
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .modal-info-box h4 {
+            font-size: 0.98rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-info-box ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .modal-info-box li {
+            position: relative;
+            padding-left: 16px;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        .modal-info-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ── 소제목 1: 현장 운영 지침 (파란색 톤) ── */
+        .modal-info-box.guide-box {
+            background: #f0f6ff;
+            border-left: 4px solid var(--primary-blue);
+        }
+        .modal-info-box.guide-box h4 {
+            color: var(--primary-blue);
+        }
+        .modal-info-box.guide-box li {
+            color: #2b3a4a;
+        }
+        .modal-info-box.guide-box li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary-blue);
+            font-weight: bold;
+            font-size: 1.2rem;
+            top: -2px;
+        }
+
+        /* ── 소제목 2: 안전 보건 수칙 (붉은색 톤) ── */
+        .modal-info-box.safety-box {
+            background: #fff5f5;
+            border-left: 4px solid #e53e3e;
+        }
+        .modal-info-box.safety-box h4 {
+            color: #e53e3e;
+        }
+        .modal-info-box.safety-box li {
+            color: #4a2b2b;
+        }
+        .modal-info-box.safety-box li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #e53e3e;
+            font-weight: bold;
+            font-size: 1.2rem;
+            top: -2px;
+        }
+
+        @media (max-width: 900px) {
+            .facilities-container.grid-view {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .view-toggle-group {
+                align-self: flex-end;
+            }
+            .facilities-container.list-view .facility-item {
+                flex-direction: column;
+            }
+            .facilities-container.list-view .facility-img-box {
+                flex: none;
+                width: 100%;
+                height: 200px;
+            }
+            .facilities-container.list-view .facility-info {
+                padding: 24px;
+            }
+            .facilities-container.grid-view {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== 보유 장비 전용 스타일 (주요 시설과 충돌 방지) ===== */
+        .equipment-controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 16px;
+            background: var(--bg-white);
+            padding: 16px 24px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .equipment-filter-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .equipment-filter-btn {
+            padding: 9px 20px;
+            border-radius: 50px;
+            border: 1.5px solid var(--border-color);
+            background: #ffffff;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .equipment-filter-btn:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            background: #f0f6ff;
+        }
+        .equipment-filter-btn.active {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,86,179,0.25);
+        }
+        .equipment-view-toggle-group {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-cool-gray);
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .equipment-view-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #868e96;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .equipment-view-btn.active {
+            background: #ffffff;
+            color: var(--primary-blue);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        /* ── 보유 장비 컨테이너 ── */
+        .equipment-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        .equipment-item {
+            background: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, display 0.3s ease;
+        }
+        .equipment-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        }
+        .equipment-item.hidden {
+            display: none !important;
+        }
+        .equipment-item .equipment-img-box {
+            position: relative;
+            overflow: hidden;
+        }
+        .equipment-item .equipment-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .equipment-item:hover .equipment-img-box img {
+            transform: scale(1.05);
+        }
+        .equipment-info-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .equipment-info-content .eq-tag {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .eq-tag.process { background: #eff6ff; color: var(--primary-blue); }
+        .eq-tag.welding { background: #fff5f5; color: #e53e3e; }
+        .eq-tag.transport { background: #f3e8ff; color: #9b59b6; }
+
+        .equipment-info-content h4 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+        .equipment-info-content p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .equipment-info-content .eq-btn-more {
+            align-self: flex-start;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            background-color: transparent;
+            border: 1.5px solid var(--primary-blue);
+            padding: 8px 18px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .equipment-info-content .eq-btn-more i {
+            font-size: 0.82rem;
+            transition: transform 0.25s ease;
+        }
+        .equipment-item:hover .eq-btn-more {
+            background-color: var(--primary-blue);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2);
+        }
+        .equipment-item:hover .eq-btn-more i {
+            transform: translateX(4px);
+        }
+
+        /* ── 장비 뷰 ── */
+        /* List View */
+        .equipment-container.list-view {
+            flex-direction: column;
+        }
+        .equipment-container.list-view .equipment-item {
+            display: flex;
+            min-height: 240px;
+        }
+        .equipment-container.list-view .equipment-img-box {
+            flex: 0 0 35%;
+            min-height: 240px;
+        }
+        .equipment-container.list-view .equipment-info-content {
+            flex: 1;
+            padding: 30px 40px;
+        }
+
+        /* Grid View */
+        .equipment-container.grid-view {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .equipment-container.grid-view .equipment-item {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .equipment-container.grid-view .equipment-img-box {
+            width: 100%;
+            height: 200px;
+        }
+        .equipment-container.grid-view .equipment-info-content {
+            padding: 24px;
+            flex: 1;
+        }
+
+        @media (max-width: 900px) {
+            .equipment-container.grid-view {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .equipment-controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .equipment-view-toggle-group {
+                align-self: flex-end;
+            }
+            .equipment-container.list-view .equipment-item {
+                flex-direction: column;
+            }
+            .equipment-container.list-view .equipment-img-box {
+                flex: none;
+                width: 100%;
+                height: 200px;
+            }
+            .equipment-container.list-view .equipment-info-content {
+                padding: 24px;
+            }
+            .equipment-container.grid-view {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="icon" href="../images/favicon.png">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="../images/batech_logo.png" alt="비에이텍 로고 아이콘" style="height: 30px; vertical-align: middle; margin-right: 8px;">
+                    비에이텍(주)
+                </a>
+            </div>
+            <nav class="gnb">
+                <ul>
+                    <li class="has-dropdown">
+                        <a href="intro.html">기업 소개</a>
+                        <ul class="dropdown">
+                            <li><a href="intro.html#overview">회사개요</a></li>
+                            <li><a href="intro.html#organization">조직도</a></li>
+                            <li><a href="intro.html#certification">인증현황</a></li>
+                            <li><a href="intro.html#tab-esg">ESG 지역상생</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="product.html">주요 제품</a></li>
+                    <li class="has-dropdown">
+                        <a href="equipment.html" style="color:var(--primary-blue)">장비 및 시설</a>
+                        <ul class="dropdown">
+                            <li><a href="equipment.html#factory">주요 시설</a></li>
+                            <li><a href="equipment.html#equipment">보유 장비</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-dropdown">
+                        <a href="reference.html">주요사업실적</a>
+                        <ul class="dropdown">
+                            <li><a href="reference.html#tab-list">실적 리스트</a></li>
+                            <li><a href="reference.html#tab-gallery">현장 적용 사례</a></li>
+                            <li><a href="reference.html#tab-analytics">비즈니스 데이터</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-dropdown">
+                        <a href="support.html">고객지원</a>
+                        <ul class="dropdown">
+                            <li><a href="support.html#tab-inquiry">문의하기</a></li>
+                            <li><a href="support.html#tab-library">기술 문서 라이브러리</a></li>
+                            <li><a href="support.html#tab-sharing">긴급 펌프 쉐어링</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="map.html">오시는 길</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header" style="background-image: url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+            <i class="fas fa-tools"></i>
+            <h1>장비 및 시설</h1>
+            <p>비에이텍(주)가 보유한 업계 최고 수준의 정밀 가공 인프라와 스마트 생산 시스템입니다.</p>
+        </div>
+
+        <section class="section">
+            <div class="container">
+                <div class="tab-container">
+                    <div class="tab-menu">
+                        <button class="tab-btn active" data-target="#tab-factory">주요 시설</button>
+                        <button class="tab-btn" data-target="#tab-equipment">보유 장비</button>
+                    </div>
+                </div>
+
+                <!-- 주요 시설 -->
+                <div id="tab-factory" class="tab-pane active">
+                    <div style="text-align: center; margin-bottom: 44px;">
+                        <h3 style="font-size: 1.7rem; color: var(--primary-dark); margin-bottom: 12px;">완벽한 품질을 만드는 스마트 생산 인프라</h3>
+                        <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.7;">
+                            설계실부터 조립 전용 구역, 그리고 비에이텍만의 핵심 자부심인 펌프 전수 성능 시험장을 갖춰, 한 대의 누락도 없이 철저하게 성능 검증을 마친 펌프만을 시장에 출고합니다.
+                        </p>
+                    </div>
+
+                    <!-- 컨트롤 바 (카테고리 필터 및 뷰 토글) -->
+                    <div class="controls-bar">
+                        <div class="filter-group" id="gallery-filter-bar">
+                            <button class="filter-btn active" data-filter="all">전체보기</button>
+                            <button class="filter-btn" data-filter="manufacturing">제조설비</button>
+                            <button class="filter-btn" data-filter="quality">검사실</button>
+                            <button class="filter-btn" data-filter="storage">보관소</button>
+                        </div>
+                        <div class="view-toggle-group">
+                            <button id="btn-list-view" class="view-btn active" title="리스트 보기">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button id="btn-grid-view" class="view-btn" title="그리드 보기">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 시설 리스트 (기본값: list-view) -->
+                    <div class="facilities-container list-view" id="facility-gallery">
+                        <!-- line1 -->
+                        <div class="facility-item" data-id="line1" data-category="manufacturing">
+                            <div class="facility-img-box">
+                                <img src="../images/펌프 제작소.png" alt="펌프 제조 및 조립 라인">
+                            </div>
+                            <div class="facility-info">
+                                <span class="tag manufacturing">제조설비</span>
+                                <h4>펌프 제조 및 조립 라인</h4>
+                                <p>전문 엔지니어들이 정밀 가공된 부품을 설계 기준에 부합하도록 엄격하게 조립 및 제조하는 든든한 스마트 펌프 생산 라인입니다.</p>
+                                <span class="btn-more">현장 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- line2 -->
+                        <div class="facility-item" data-id="line2" data-category="quality">
+                            <div class="facility-img-box">
+                                <img src="../images/성능 시험장.png" alt="품질 테스트 및 검사실">
+                            </div>
+                            <div class="facility-info">
+                                <span class="tag quality">검사실</span>
+                                <h4>품질 테스트 및 검사실</h4>
+                                <p>정밀 측정 설비를 바탕으로 펌프의 최대 양정, 유량 부하 및 vibration 등 다양한 구동 지표를 완벽히 정량 검사하는 핵심 검사 구역입니다.</p>
+                                <span class="btn-more">현장 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- line3 -->
+                        <div class="facility-item" data-id="line3" data-category="storage">
+                            <div class="facility-img-box">
+                                <img src="../images/자재관리소.png" alt="자재 및 부품 보관소">
+                            </div>
+                            <div class="facility-info">
+                                <span class="tag storage">보관소</span>
+                                <h4>자재 및 부품 보관소</h4>
+                                <p>체계적인 보관 환경 속에서 원소재 및 특수 베어링 등 모터펌프 핵심 구성 부품의 적정 재고와 최상급 물성을 엄격히 유지하는 창고 인프라입니다.</p>
+                                <span class="btn-more">현장 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- line4 -->
+                        <div class="facility-item" data-id="line4" data-category="manufacturing">
+                            <div class="facility-img-box">
+                                <img src="../images/공장 외부 전경.png" alt="공장 외부 전경">
+                            </div>
+                            <div class="facility-info">
+                                <span class="tag manufacturing">제조설비</span>
+                                <h4>공장 외부 전경</h4>
+                                <p>비에이텍 본사 및 제1공장의 탁 트인 전경으로 현대적이고 쾌적하게 구성된 설계 통합 제조동 외경입니다.</p>
+                                <span class="btn-more">현장 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- line5 -->
+                        <div class="facility-item" data-id="line5" data-category="manufacturing">
+                            <div class="facility-img-box">
+                                <img src="../images/공장 내부 전경.png" alt="공장 내부 전경">
+                            </div>
+                            <div class="facility-info">
+                                <span class="tag manufacturing">제조설비</span>
+                                <h4>공장 내부 전경</h4>
+                                <p>최적화된 모터 펌프 제작 가공 라인과 최고의 안전 등급을 자랑하는 쾌적하고 조화로운 작업 환경 구역입니다.</p>
+                                <span class="btn-more">현장 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- line6 -->
+                        <div class="facility-item" data-id="line6" data-category="storage">
+                            <div class="facility-img-box">
+                                <img src="../images/펌프 출고대기소.png" alt="펌프 출고대기소">
+                            </div>
+                            <div class="facility-info">
+                                <span class="tag storage">보관소</span>
+                                <h4>펌프 출고대기소</h4>
+                                <p>완벽한 규격 성능 테스트를 통과한 펌프 완제품을 엄격한 검수 절차를 거쳐 납품처별로 대기 및 포장하는 보관 통로입니다.</p>
+                                <span class="btn-more">현장 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 보유 장비 -->
+                <div id="tab-equipment" class="tab-pane">
+                    <div style="text-align: center; margin-bottom: 44px;">
+                        <h3 style="font-size: 1.7rem; color: var(--primary-dark); margin-bottom: 12px;">정밀 부품 가공 및 생산 설비</h3>
+                        <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.7;">
+                            비에이텍(주)는 완벽한 공차 제어 및 고하중 기동 신뢰성을 갖춘 펌프 제작을 위해 최고 수준의 부품 절단, 정밀 가공 및 특수 용접 기계 설비를 상시 가동하고 있습니다.
+                        </p>
+                    </div>
+
+                    <!-- 장비 섹션 컨트롤 바 (필터 및 뷰 토글) -->
+                    <div class="equipment-controls-bar">
+                        <div class="equipment-filter-group" id="equipment-filter-bar">
+                            <button class="equipment-filter-btn active" data-filter="all">전체보기</button>
+                            <button class="equipment-filter-btn" data-filter="가공">정밀 가공</button>
+                            <button class="equipment-filter-btn" data-filter="용접">절단/용접</button>
+                            <button class="equipment-filter-btn" data-filter="운반">운반 설비</button>
+                        </div>
+                        <div class="equipment-view-toggle-group">
+                            <button id="btn-eq-list-view" class="equipment-view-btn active" title="리스트 보기">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button id="btn-eq-grid-view" class="equipment-view-btn" title="그리드 보기">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 장비 리스트 (기본값: list-view) -->
+                    <div class="equipment-container list-view" id="equipment-gallery">
+                        <!-- eq1 (선반) -->
+                        <div class="equipment-item" data-id="eq1" data-category="가공">
+                            <div class="equipment-img-box">
+                                <img src="../images/선반.png" alt="범용 선반">
+                            </div>
+                            <div class="equipment-info-content">
+                                <span class="eq-tag process">정밀 가공</span>
+                                <h4>범용 선반 (Lathe Machine)</h4>
+                                <p>펌프 축(Shaft) 및 회전체 부품들의 정밀 원통 외경 및 단면 초정밀 고속 회전 절삭 가공을 전담하는 가공 설비입니다.</p>
+                                <span class="eq-btn-more">장비 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- eq2 (밀링) -->
+                        <div class="equipment-item" data-id="eq2" data-category="가공">
+                            <div class="equipment-img-box">
+                                <img src="../images/밀링 머신.png" alt="밀링 머신">
+                            </div>
+                            <div class="equipment-info-content">
+                                <span class="eq-tag process">정밀 가공</span>
+                                <h4>밀링 머신 (Milling Machine)</h4>
+                                <p>정교한 평면 가공, 홈 파기 및 특수 임펠러 날개 설계 형상의 다중 키웨이(Keyway) 홈 등 다각도 정밀 다축 가공을 수행합니다.</p>
+                                <span class="eq-btn-more">장비 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- eq3 (연삭기) -->
+                        <div class="equipment-item" data-id="eq3" data-category="가공">
+                            <div class="equipment-img-box">
+                                <img src="../images/연삭기.png" alt="정밀 연삭기">
+                            </div>
+                            <div class="equipment-info-content">
+                                <span class="eq-tag process">정밀 가공</span>
+                                <h4>정밀 연삭기 (Grinding Machine)</h4>
+                                <p>펌프 기동 시 미세 누설을 완벽히 차단하고 축봉 장치(Mechanical Seal) 접촉부의 기하 공차를 극대화하는 경면 연마기입니다.</p>
+                                <span class="eq-btn-more">장비 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- eq4 (절단기) -->
+                        <div class="equipment-item" data-id="eq4" data-category="용접">
+                            <div class="equipment-img-box">
+                                <img src="../images/절단기.png" alt="고속 쇠톱 절단기">
+                            </div>
+                            <div class="equipment-info-content">
+                                <span class="eq-tag welding">절단/용접</span>
+                                <h4>고속 쇠톱 절단기 (Band Saw)</h4>
+                                <p>다양한 강도와 구경의 강재 파이프 및 탄소강 바(Bar) 원자재를 설계 규격에 따라 미세 오차 없이 든든하게 절단해냅니다.</p>
+                                <span class="eq-btn-more">장비 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- eq5 (알곤용접기) -->
+                        <div class="equipment-item" data-id="eq5" data-category="용접">
+                            <div class="equipment-img-box">
+                                <img src="../images/알곤용접기.png" alt="알곤 용접기">
+                            </div>
+                            <div class="equipment-info-content">
+                                <span class="eq-tag welding">절단/용접</span>
+                                <h4>알곤 용접기 (TIG Welder)</h4>
+                                <p>펌프 케이싱 및 부식 저항성이 핵심인 스테인리스강(SUS) 자재의 가스 보호 아크 정밀 용접을 구현하여 미세 기공을 완벽히 예방합니다.</p>
+                                <span class="eq-btn-more">장비 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- eq6 (전기용접기) -->
+                        <div class="equipment-item" data-id="eq6" data-category="용접">
+                            <div class="equipment-img-box">
+                                <img src="../images/전기 용접기.png" alt="교류 전기 용접기">
+                            </div>
+                            <div class="equipment-info-content">
+                                <span class="eq-tag welding">절단/용접</span>
+                                <h4>교류 전기 용접기 (Arc Welder)</h4>
+                                <p>펌프 기단(Base Frame) 및 대형 브라켓 등 구조물의 강인하고 든든한 접합용 탄소강 고출력 아크 용접기입니다.</p>
+                                <span class="eq-btn-more">장비 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- eq7 (플라즈마절단기) -->
+                        <div class="equipment-item" data-id="eq7" data-category="용접">
+                            <div class="equipment-img-box">
+                                <img src="../images/프라즈마 절단기.png" alt="플라즈마 절단기">
+                            </div>
+                            <div class="equipment-info-content">
+                                <span class="eq-tag welding">절단/용접</span>
+                                <h4>플라즈마 절단기 (Plasma Cutter)</h4>
+                                <p>초고온 아크 플라즈마 분사 방식으로 두꺼운 철판이나 특수 합금판을 도면 곡선을 따라 미려하고 정교하게 절단합니다.</p>
+                                <span class="eq-btn-more">장비 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- eq8 (드릴) -->
+                        <div class="equipment-item" data-id="eq8" data-category="가공">
+                            <div class="equipment-img-box">
+                                <img src="../images/드릴.png" alt="대형 레이디얼 보링 머신">
+                            </div>
+                            <div class="equipment-info-content">
+                                <span class="eq-tag process">정밀 가공</span>
+                                <h4>대형 레이디얼 보링 머신 (Radial Drilling)</h4>
+                                <p>대형 플랜지 구멍 뚫기 및 펌프 흡/토출부 조립 구멍 배치를 위한 대구경 정밀 보링 및 천공용 기계입니다.</p>
+                                <span class="eq-btn-more">장비 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- eq9 (호이스트크레인) -->
+                        <div class="equipment-item" data-id="eq9" data-category="운반">
+                            <div class="equipment-img-box">
+                                <img src="../images/호이스트 크레인.png" alt="천장 주행식 호이스트 크레인">
+                            </div>
+                            <div class="equipment-info-content">
+                                <span class="eq-tag transport">운반 설비</span>
+                                <h4>천장 주행식 호이스트 크레인 (Hoist Crane)</h4>
+                                <p>중량이 무거운 대형 산업용 수중 펌프와 모터를 안전하고 신속하게 운반, 적재 및 조립 라인에 안착시키는 중장비 크레인입니다.</p>
+                                <span class="eq-btn-more">장비 가이드 및 안전수칙 보기 <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-info">
+                <div class="footer-col">
+                    <h2>비에이텍(주)</h2>
+                    <p><strong>대표이사</strong> 조세연</p>
+                    <p><strong>사업자등록번호</strong> 221-81-42625</p>
+                    <p><strong>설립일</strong> 2010.11.01</p>
+                    <p><strong>업종</strong> 제조, 도매 &nbsp;|&nbsp; <strong>주요생산제품</strong> 모터펌프</p>
+                </div>
+                <div class="footer-col">
+                    <h2>Contact Us</h2>
+                    <p><strong>본사 및 공장</strong> 강원특별자치도 춘천시 퇴계공단2길 64 (퇴계제2농공단지내)</p>
+                    <p><strong>전화</strong> 033-264-9243</p>
+                    <p><strong>팩스</strong> 033-251-5747</p>
+                    <p><strong>담당자 이메일</strong> jooho2362@gmail.com</p>
+                </div>
+            </div>
+            <div class="copyright-bar">
+                <p>&copy; 2026 B.A.Tech. All rights reserved. &nbsp;|&nbsp; <a href="ai_guide.html" class="intranet-link">비에이텍 사내 AI (NotebookLM)</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 플로팅 브로슈어 버튼 -->
+    <button id="open-brochure-btn" class="floating-brochure-btn">
+        <i class="fas fa-book-open"></i> 브로슈어
+    </button>
+
+    <!-- 3D 브로슈어 모달 -->
+    <div id="brochure-modal" class="brochure-modal">
+        <span class="brochure-close">&times;</span>
+        <div class="brochure-container">
+            <div class="page page1">
+                <div class="page page2">
+                    <div class="page page3">
+                        <div class="page page4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 주요 시설 모달 -->
+    <div id="facility-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <img src="" alt="" id="modal-img">
+            <h3>시설 상세 정보</h3>
+            <div class="modal-info-box guide-box">
+                <h4><i class="fas fa-info-circle"></i> 현장 운영 가이드</h4>
+                <ul></ul>
+            </div>
+            <div class="modal-info-box safety-box">
+                <h4><i class="fas fa-exclamation-triangle"></i> 현장 안전 수칙</h4>
+                <ul></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 보유 장비 모달 -->
+    <div id="equipment-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close eq-modal-close">&times;</span>
+            <img src="" alt="" id="eq-modal-img" style="width: 100%; height: 260px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--border-color);">
+            <h3 id="eq-modal-title">장비 상세 정보</h3>
+            <div class="modal-info-box guide-box">
+                <h4><i class="fas fa-info-circle"></i> 장비 운영 가이드</h4>
+                <ul id="eq-modal-guide-list"></ul>
+            </div>
+            <div class="modal-info-box safety-box">
+                <h4><i class="fas fa-exclamation-triangle"></i> 장비 안전 수칙</h4>
+                <ul id="eq-modal-safety-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // 1. 자바스크립트 동적 데이터 매핑 (facilityData)
+        const facilityData = [
+            {
+                id: 'line1',
+                title: '펌프 제조 및 조립 라인',
+                image: '../images/펌프 제작소.png',
+                guide: [
+                    '각 펌프 가공 라인의 실시간 동선 관리 및 연동',
+                    '일일 공정 진척 상황 점검 및 기계 기중 배치 제어'
+                ],
+                safety: [
+                    '생산동 출입 시 규격 안전화 및 작업복 필히 착용',
+                    '작업 완료 후 칩과 절삭유 누출을 제거하여 낙상 사고 방지'
+                ]
+            },
+            {
+                id: 'line2',
+                title: '품질 테스트 및 검사실',
+                image: '../images/성능 시험장.png',
+                guide: [
+                    '출하 전 최대 양정 및 유량 부하 테스트 실시',
+                    '누수 및 소음·진동(Vibration) 정밀 측정 데이터 기록'
+                ],
+                safety: [
+                    '고압 수압 테스트 시 안전 차단막 외부 대기',
+                    '테스트 설비 전원 차단(LOTO) 규정 엄수'
+                ]
+            },
+            {
+                id: 'line3',
+                title: '자재 및 부품 보관소',
+                image: '../images/자재관리소.png',
+                guide: [
+                    '체계적인 5S 활동(정리, 정돈, 청소, 습관화) 환경 관리',
+                    '선입선출(FIFO) 기반 스마트 재고 관리 적용'
+                ],
+                safety: [
+                    '지게차와 호이스트 주행 동선 내 작업자 보행 제한',
+                    '중량물 적재 시 하중 제한 규정 및 고임목 설치 필수'
+                ]
+            },
+            {
+                id: 'line4',
+                title: '공장 외부 전경',
+                image: '../images/공장 외부 전경.png',
+                guide: [
+                    '비에이텍 본사 및 제1공장 전경'
+                ],
+                safety: [
+                    '공장 부지 내 지정된 흡연 구역 외 전면 금연'
+                ]
+            },
+            {
+                id: 'line5',
+                title: '공장 내부 전경',
+                image: '../images/공장 내부 전경.png',
+                guide: [
+                    '최적화된 펌프 생산 라인 및 쾌적한 작업 환경'
+                ],
+                safety: [
+                    '공장 내 지정된 보행로 이용 및 지게차 주의'
+                ]
+            },
+            {
+                id: 'line6',
+                title: '펌프 출고대기소',
+                image: '../images/펌프 출고대기소.png',
+                guide: [
+                    '최종 검수 완료 및 관급/사급 납품 대기 구역'
+                ],
+                safety: [
+                    '출고 차량 이동 시 작업자 반경 내 진입 금지'
+                ]
+            }
+        ];
+
+        // 2. 자바스크립트 동적 데이터 매핑 (equipmentData)
+        const equipmentData = [
+            {
+                id: 'eq1',
+                title: '범용 선반 (Lathe Machine)',
+                image: '../images/선반.png',
+                guide: ['펌프 축 외경 정밀 절삭'],
+                safety: ['회전체 말림 사고 방지용 밀착 작업복 착용']
+            },
+            {
+                id: 'eq2',
+                title: '밀링 머신 (Milling Machine)',
+                image: '../images/밀링 머신.png',
+                guide: ['임펠러 다축 정밀 가공 및 홈 파기'],
+                safety: ['칩 비산 대비 보안경 필수 착용']
+            },
+            {
+                id: 'eq3',
+                title: '정밀 연삭기 (Grinding Machine)',
+                image: '../images/연삭기.png',
+                guide: ['축봉 장치 접촉부 초정밀 경면 연마'],
+                safety: ['연마석 파손 대비 방호 커버 상시 장착']
+            },
+            {
+                id: 'eq4',
+                title: '고속 쇠톱 절단기 (Band Saw)',
+                image: '../images/절단기.png',
+                guide: ['강재 파이프 및 탄소강 미세 오차 절단'],
+                safety: ['톱날 교체 시 메인 전원 완전 차단(LOTO)']
+            },
+            {
+                id: 'eq5',
+                title: '알곤 용접기 (TIG Welder)',
+                image: '../images/알곤용접기.png',
+                guide: ['스테인리스강(SUS) 가스 보호 아크 정밀 용접'],
+                safety: ['용접 흄 배출기 가동 및 방진마스크 착용']
+            },
+            {
+                id: 'eq6',
+                title: '교류 전기 용접기 (Arc Welder)',
+                image: '../images/전기 용접기.png',
+                guide: ['펌프 기단(Base Frame) 고출력 접합'],
+                safety: ['감전 방지용 절연 장갑 착용 및 건조 상태 유지']
+            },
+            {
+                id: 'eq7',
+                title: '플라즈마 절단기 (Plasma Cutter)',
+                image: '../images/프라즈마 절단기.png',
+                guide: ['두꺼운 철판 및 합금 초고온 정교 절단'],
+                safety: ['고온 스파크 화재 대비 주변 소화기 비치']
+            },
+            {
+                id: 'eq8',
+                title: '대형 레이디얼 보링 머신 (Radial Drilling)',
+                image: '../images/드릴.png',
+                guide: ['플랜지 구멍 및 대구경 정밀 천공'],
+                safety: ['회전축 말림 방지를 위해 면장갑 착용 절대 금지']
+            },
+            {
+                id: 'eq9',
+                title: '천장 주행식 호이스트 크레인 (Hoist Crane)',
+                image: '../images/호이스트 크레인.png',
+                guide: ['대형 수중 펌프 및 주물 원자재 운반'],
+                safety: ['정격 하중 초과 인양 엄금 및 하부 통행 차단']
+            }
+        ];
+
+        // ===== 객체 지향적 공통 갤러리 제어 함수 (initGallery) =====
+        function initGallery(tabId, dataArray, itemClass, modalId, containerClass) {
+            // 스코프 고립화 (tabId에 매핑된 특정 탭 안에서만 검색 진행)
+            const tab = document.querySelector(tabId);
+            if (!tab) return;
+
+            const filterBar = tab.querySelector('.filter-group, .equipment-filter-group');
+            const gallery = tab.querySelector(containerClass);
+            const btnListView = tab.querySelector('#btn-list-view, #btn-eq-list-view');
+            const btnGridView = tab.querySelector('#btn-grid-view, #btn-eq-grid-view');
+            
+            // 모달창 뼈대 요소를 전체에서 탐색
+            const modal = document.querySelector(modalId);
+
+            if (!gallery) return;
+
+            // 탭 내부 스코프로 한정하여 아이템 배열 추출
+            const items = Array.from(gallery.querySelectorAll(itemClass));
+
+            // [1] 카테고리 필터링 기능 (스코프 내 고립)
+            if (filterBar) {
+                filterBar.addEventListener('click', function (e) {
+                    const btn = e.target.closest('.filter-btn, .equipment-filter-btn');
+                    if (!btn) return;
+
+                    // 형제 버튼들의 활성화 상태 해제
+                    filterBar.querySelectorAll('.filter-btn, .equipment-filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const filter = btn.getAttribute('data-filter');
+
+                    // 필터 조건에 부합하는 아이템만 부드럽게 노출
+                    items.forEach(item => {
+                        const category = item.getAttribute('data-category');
+                        if (filter === 'all' || category === filter) {
+                            item.classList.remove('hidden');
+                        } else {
+                            item.classList.add('hidden');
+                        }
+                    });
+                });
+            }
+
+            // [2] 뷰 토글 기능 (List <-> Grid)
+            if (btnListView && btnGridView) {
+                btnListView.addEventListener('click', function () {
+                    btnListView.classList.add('active');
+                    btnGridView.classList.remove('active');
+                    gallery.classList.add('list-view');
+                    gallery.classList.remove('grid-view');
+                });
+
+                btnGridView.addEventListener('click', function () {
+                    btnGridView.classList.add('active');
+                    btnListView.classList.remove('active');
+                    gallery.classList.add('grid-view');
+                    gallery.classList.remove('list-view');
+                });
+            }
+
+            // [3] 모달 동적 바인딩 및 독립 이벤트 연동 (이벤트 위임 적용)
+            if (modal) {
+                const modalImg = modal.querySelector('img');
+                const modalTitle = modal.querySelector('h3');
+                const modalGuideList = modal.querySelector('.guide-box ul');
+                const modalSafetyList = modal.querySelector('.safety-box ul');
+                const closeBtn = modal.querySelector('.modal-close, .eq-modal-close');
+
+                // 이벤트 위임을 사용하여 이미지/글씨/버튼 어디를 누르든 부모 탐색 성공
+                gallery.addEventListener('click', function (e) {
+                    const item = e.target.closest(itemClass);
+                    if (!item) return;
+
+                    const id = item.getAttribute('data-id');
+                    const data = dataArray.find(d => d.id === id);
+
+                    if (data) {
+                        // 모달 데이터 동적 주입
+                        if (modalImg) {
+                            modalImg.src = data.image;
+                            modalImg.alt = data.title;
+                        }
+                        if (modalTitle) {
+                            modalTitle.textContent = data.title;
+                        }
+
+                        // 운영 지침 렌더링
+                        if (modalGuideList) {
+                            modalGuideList.innerHTML = '';
+                            data.guide.forEach(text => {
+                                const li = document.createElement('li');
+                                li.textContent = text;
+                                modalGuideList.appendChild(li);
+                            });
+                        }
+
+                        // 안전 수칙 렌더링
+                        if (modalSafetyList) {
+                            modalSafetyList.innerHTML = '';
+                            data.safety.forEach(text => {
+                                const li = document.createElement('li');
+                                li.textContent = text;
+                                modalSafetyList.appendChild(li);
+                            });
+                        }
+
+                        // 모달 활성화
+                        modal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+
+                const closeHelper = () => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                };
+
+                // 모달 닫기 (X 버튼)
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', closeHelper);
+                }
+
+                // 모달 닫기 (바깥 어두운 배경)
+                modal.addEventListener('click', function (e) {
+                    if (e.target === modal) {
+                        closeHelper();
+                    }
+                });
+
+                // ESC 키 누를 시 모달 닫기
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && modal.classList.contains('active')) {
+                        closeHelper();
+                    }
+                });
+            }
+        }
+
+        // ===== 독립적인 실행 호출 =====
+        initGallery('#tab-factory', facilityData, '.facility-item', '#facility-modal', '.facilities-container');
+        initGallery('#tab-equipment', equipmentData, '.equipment-item', '#equipment-modal', '.equipment-container');
+    </script>
+    <!-- BGM 플로팅 플레이어 -->
+    <button id="bgm-toggle-btn" aria-label="BGM 재생/정지">
+        <i class="fas fa-volume-mute"></i>
+    </button>
+    <audio id="bgm-audio" src="../audio/site_bgm.mp3" loop preload="none"></audio>
+
+
+
+</body>
+</html>
+
