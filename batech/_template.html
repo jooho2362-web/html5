@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비에이텍(주) - 페이지 제목</title>
+    <!-- 공통 스타일시트 연결 -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../images/favicon.png">
+</head>
+
+<body>
+    <!-- 공통 Header (Sticky 적용) -->
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="../images/batech_logo.png" alt="비에이텍 로고 아이콘" style="height: 30px; vertical-align: middle; margin-right: 8px;">
+                    비에이텍(주)
+                </a>
+            </div>
+            <nav class="gnb">
+                <ul>
+                    <li class="has-dropdown">
+                        <a href="intro.html">기업 소개</a>
+                        <ul class="dropdown">
+                            <li><a href="intro.html#overview">회사개요</a></li>
+                            <li><a href="intro.html#organization">조직도</a></li>
+                            <li><a href="intro.html#certification">인증현황</a></li>
+                            <li><a href="intro.html#tab-esg">ESG 지역상생</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="product.html">주요 제품</a></li>
+                    <li class="has-dropdown">
+                        <a href="equipment.html">장비 및 시설</a>
+                        <ul class="dropdown">
+                            <li><a href="equipment.html#factory">주요 시설</a></li>
+                            <li><a href="equipment.html#equipment">보유 장비</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-dropdown">
+                        <a href="reference.html">주요사업실적</a>
+                        <ul class="dropdown">
+                            <li><a href="reference.html#tab-list">실적 리스트</a></li>
+                            <li><a href="reference.html#tab-gallery">현장 적용 사례</a></li>
+                            <li><a href="reference.html#tab-analytics">비즈니스 데이터</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-dropdown">
+                        <a href="support.html">고객지원</a>
+                        <ul class="dropdown">
+                            <li><a href="support.html#tab-inquiry">문의하기</a></li>
+                            <li><a href="support.html#tab-library">기술 문서 라이브러리</a></li>
+                            <li><a href="support.html#tab-sharing">긴급 펌프 쉐어링</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="map.html">오시는 길</a></li>
+                </ul>
+            </nav>
+            <!-- 모바일용 햄버거 메뉴 -->
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 공통 Subpage Banner (Page Header) -->
+        <!-- *주의*: 메인 페이지(index.html)에서는 이 부분을 지우고 이전에 만든 Hero Section을 사용하세요 -->
+        <div class="page-header">
+            <!-- 각 서브페이지에 맞게 제목을 변경하세요 -->
+            <h1>페이지 제목 (예: 기업소개)</h1>
+        </div>
+
+        <!-- 본문 내용이 들어갈 섹션 (padding을 넉넉하게 적용할 빈 공간) -->
+        <section class="section">
+            <div class="container">
+                <!-- ============================================== -->
+                <!-- 이곳에 각 페이지에 맞는 본문 HTML을 넣어주세요 -->
+                <!-- ============================================== -->
+
+            </div>
+        </section>
+    </main>
+
+    <!-- 공통 Footer (균형 잡힌 모던 레이아웃) -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-info">
+                <div class="footer-col">
+                    <h2>비에이텍(주)</h2>
+                    <p><strong>대표이사</strong> 조세연</p>
+                    <p><strong>사업자등록번호</strong> 221-81-42625</p>
+                    <p><strong>설립일</strong> 2010.11.01</p>
+                    <p><strong>업종</strong> 제조, 도매 &nbsp;|&nbsp; <strong>주요생산제품</strong> 모터펌프</p>
+                </div>
+                <div class="footer-col">
+                    <h2>Contact Us</h2>
+                    <p><strong>본사 및 공장</strong> 강원특별자치도 춘천시 퇴계공단2길 64 (퇴계제2농공단지내)</p>
+                    <p><strong>전화</strong> 033-264-9243</p>
+                    <p><strong>팩스</strong> 033-251-5747</p>
+                    <p><strong>담당자 이메일</strong> jooho2362@gmail.com</p>
+                </div>
+            </div>
+            <div class="copyright-bar">
+                <p>&copy; 2026 B.A.Tech. All rights reserved. &nbsp;|&nbsp; <a href="ai_guide.html" class="intranet-link">비에이텍 사내 AI (NotebookLM)</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 플로팅 브로슈어 버튼 -->
+    <button id="open-brochure-btn" class="floating-brochure-btn">
+        <i class="fas fa-book-open"></i> 브로슈어
+    </button>
+
+    <!-- 3D 브로슈어 모달 -->
+    <div id="brochure-modal" class="brochure-modal">
+        <span class="brochure-close">&times;</span>
+        <div class="brochure-container">
+            <div class="page page1">
+                <div class="page page2">
+                    <div class="page page3">
+                        <div class="page page4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 공통 스크립트 파일 연결 -->
+    <!-- BGM 플로팅 플레이어 -->
+    <button id="bgm-toggle-btn" aria-label="BGM 재생/정지">
+        <i class="fas fa-volume-mute"></i>
+    </button>
+    <audio id="bgm-audio" src="../audio/site_bgm.mp3" loop preload="none"></audio>
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
